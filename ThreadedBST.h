@@ -1,13 +1,8 @@
 #include <iostream>
 #include <iomanip>
 
-using namespacestd;
-struct tbstNode {
-	int data;
-	tbstNode *left;
-	tbstNode *right;
-	bool rThread;
-};
+using namespace std;
+
 
 class ThreadedBST {	
 	friend ostream &operator<<(ostream &out, const SkipList &skip);
@@ -22,22 +17,22 @@ public:
 
 	// Parameterized constructor
 	ThreadedBST(int rootItem);
+	
+	//This is a different method from the one above, This one creates n number of nodes
+	//in nonincremental order
+	ThreadedBST(const int &n);
 
-  //Destructor
-  ~ThreadedBST();
+  	//Destructor
+  	~ThreadedBST();
   
-  //Get Depth
-  int getDepth() const;
+ 	//Get Depth
+  	int getDepth() const;
 
 	// Insert function
-	ThreadedBST* Insert(ThreadedBST* root, int value);
+	ThreadedBST* Insert(ThreadedBST* root, ItemType value);
 
-	// Completes an inorder traversal of the threaded BST
-	void Inorder(ThreadedBST* root);
-	
-	// Delete
-
-	void remove(tbst<ItemType> *node, ItemType data);
+	// Remove
+	void remove(tbst<ItemType> *node, ItemType value);
 	
 	// Copy
 	ThreadedBST(const ThreadedBST<ItemType> &tree);
@@ -45,16 +40,16 @@ public:
 	// Remove Even
 	void removeEven();
 	
-  //Inorder Traverse for testing
-  void inorderTraverse();
-  
-  //I don't think we need these. 
-	// Operator= overload
-	// Operator<< overload
+	//We'll have to pick between these two, I have no preferance but if we're in the Tree we have access to the root already.
 	
+ 	//Inorder Traverse for testing
+ 	void inorderTraverse();
 
+	// Completes an inorder traversal of the threaded BST
+	void Inorder(ThreadedBST* root);
+	
 	// Clear
-	void clear()
+	void clear();
 
 };
 
