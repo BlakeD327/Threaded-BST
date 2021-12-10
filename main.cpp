@@ -9,14 +9,14 @@ int main()
 {
     ThreadedBST b;
     BSTNode* root = NULL;
-    b.Insert(5);
-    b.Insert(3);
-    b.Insert(2);
-    b.Insert(4);
-    b.Insert(7);
-    b.Insert(6);
-    b.Insert(8);
+    b.insert(root, 5);
+    b.insert(root, 3);
+    b.insert(root, 2);
+    b.insert(root, 4);
+    b.insert(root, 7);
+    b.insert(root, 6);
+    b.insert(root, 8);
  
-    b.Inorder(root);
+    b.insert(root, 9);
     return 0;
 }
