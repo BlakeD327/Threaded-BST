@@ -38,12 +38,10 @@ public:
 
 	void insertMultipleNodes(const int& min, const int& max);
 
+	void insert(const int& item);
+
 	BSTNode* insert(BSTNode* node, const int& data);
 
-
-
-	// Insert function
-	//void Insert(const int& item);
 
 	void setThread(BSTNode* node);
 
