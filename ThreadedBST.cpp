@@ -1,5 +1,6 @@
+
 #include <iostream>
-#include <math.h> 
+#include <math.h>
 #include "ThreadedBST.h"
 
 using namespace std;
@@ -31,24 +32,88 @@ ThreadedBST::~ThreadedBST() {
 	clear(root);
 }
 
+/**
+void ThreadedBST::Insert(const int& item) {
+	// if the tree is empty, create a new node and set it as root
+	if (root == nullptr) {
+		root = new BSTNode(item);
+		return;
+	}
+	// start with the root node
+	BSTNode* curr = root;
+	// pointer to store the parent of the current node
+	BSTNode* parent = nullptr;
+
+	// traverse the tree and find the parent node of the given item
+	while (curr != nullptr) {
+		// update the parent to the current node
+		parent = curr;
+
+		// if the given item is less than the current node, go to the
+		// left subtree; otherwise, go to the right subtree.
+		if (item < curr->item) {
+			if (curr->isThreadedLeft == true) {
+				break;
+			}
+			else {
+				curr = curr->leftChildPtr;
+			}
+		}
+		else {
+			if (curr->isThreadedRight == true) {
+				break;
+			}
+			else {
+				curr = curr->rightChildPtr;
+			}
+		}
+	} //end while loop
+
+	// construct a node and assign it to the appropriate parent pointer
+	BSTNode* newNode = new BSTNode(item);
+	newNode->isThreadedRight = newNode->isThreadedLeft = true;
+
+	if (item < parent->item) {
+		//set newNode's left ptr to its parent's old left ptr
+		newNode->leftChildPtr = parent->leftChildPtr;
+		//newNode's right ptr points back at parent
+		newNode->rightChildPtr = parent;
+		//parent points to newNode
+		parent->leftChildPtr = newNode;
+		//set parent's isThreadedLeft(bool) to false as it now has 
+		// a lwft node
+		parent->isThreadedLeft = false;
+	}
+	else {
+		newNode->rightChildPtr = parent->rightChildPtr;
+		newNode->leftChildPtr = parent;
+		parent->rightChildPtr = newNode;
+		parent->isThreadedRight = false;
+	}
+}
+
+*/
 
 void ThreadedBST::insertMultipleNodes(const int& min, const int& max) {
 	int middle = (min + max) / 2;
 	//recursive case
 	if (middle != min && middle != max) {
-		insert(root, middle);
+		insert(middle);
 		insertMultipleNodes(min, middle - 1);
 		insertMultipleNodes(middle + 1, max);
 	}
 	//Base Case if either the min or max is reached
 	else {
-		insert(root, max);
+		insert(max);
 		if (min != max) {
-			insert(root, min);
+			insert(min);
 		}
 	}
 }
 
+void ThreadedBST::insert(const int& newItem) {
+	insert(root, newItem);
+}
 
 BSTNode* ThreadedBST::insert(BSTNode* node, const int& newItem) {
 	//Case 1: If the tree is empty, return a single new
@@ -126,8 +191,16 @@ BSTNode* ThreadedBST::getFarthestRight(BSTNode* node) const {
 }
 
 int ThreadedBST::getDepth() const {
-	return log2(count + 1);
+	return log(count + 1);
 }
+
+/**
+void ThreadedBST::Inorder() {
+	Inorder(root);
+}
+*/
+
+
 
 void ThreadedBST::clear(BSTNode* node) {
 	//Case 1: Node is not empty
