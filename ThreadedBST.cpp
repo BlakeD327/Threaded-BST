@@ -1,83 +1,64 @@
+#ifndef ASS5_THREADEDBST_H
+#define ASS5_THREADEDBST_H
 
 #include <iostream>
-#include "ThreadedBST.h"
+#include <iomanip>
 
 using namespace std;
 
-BSTNode::BSTNode(int item) {
-	this->item = item;
-	this->leftChildPtr = nullptr;
-	this->rightChildPtr = nullptr;
-	this->isThreadedLeft = false;
-	this->isThreadedRight = false;
-}
+class BSTNode {
+	friend class ThreadedBST;	
+private:
+	explicit BSTNode(int item);
+	int item; //Value
+	BSTNode *leftChildPtr; //Left Pointer
+	BSTNode *rightChildPtr; //Right Pointer
+	bool isThreadedLeft;	//Bool of left Thread
+	bool isThreadedRight;	//Bool of Right Thread
+};
 
-//Default Constructor
-ThreadedBST::ThreadedBST() {
-    this->root = nullptr;
-}
+class ThreadedBST {
+	friend ostream &operator<<(ostream &out, const ThreadedBST &threadedBST);
 
-void ThreadedBST::Insert(const int& item) {
-    // if the tree is empty, create a new node and set it as root
-    if (root == nullptr) {
-        root = new BSTNode(item);
-        return;
-    }
-    // start with the root node
-    BSTNode *curr = root;
-    // pointer to store the parent of the current node
-    BSTNode *parent = nullptr;
+private:
+	BSTNode* root = nullptr;
 
-    // traverse the tree and find the parent node of the given item
-    while (curr != nullptr) {
-        // update the parent to the current node
-        parent = curr;
- 
-        // if the given item is less than the current node, go to the
-        // left subtree; otherwise, go to the right subtree.
-        if (item < curr->item) {
-            if (curr->isThreadedLeft == true) {
-				break;
-			} else {
-				curr = curr->leftChildPtr;
-			}			
-        } else {
-            if (curr->isThreadedRight == true) {
-				break;
-			} else {
-				curr = curr->rightChildPtr;
-			}
-        }
-    } //end while loop
- 
-    // construct a node and assign it to the appropriate parent pointer
-	BSTNode* newNode = new BSTNode(item);
-	newNode->isThreadedRight = newNode->isThreadedLeft = true;	
+public:
+	//Default
+	explicit ThreadedBST();
 
-	if (item < parent->item) {
-		//set newNode's left ptr to its parent's old left ptr
-		newNode->leftChildPtr = parent->leftChildPtr;
-		//newNode's right ptr points back at parent
-		newNode->rightChildPtr = parent;
-		//parent points to newNode
-		parent->leftChildPtr = newNode;
-		//set parent's isThreadedLeft(bool) to false as it now has 
-		// a lwft node
-		parent->isThreadedLeft = false;
-	} else {
-		newNode->rightChildPtr = parent->rightChildPtr;
-		newNode->leftChildPtr = parent;
-		parent->rightChildPtr = newNode;
-		parent->isThreadedRight = false;
-	}
-}
+	// Parameterized constructor
+	//explicit ThreadedBST(int item);
 
+	//This is a different method from the one above, 
+	// This one creates n number of nodes
+	//  in nonincremental order
+	ThreadedBST(const int& n);
 
-void ThreadedBST::Inorder(BSTNode* root) {
-	if (root == nullptr){
-		return;
-	}
-	Inorder(root->leftChildPtr);
-	cout << root->item << endl;
-	Inorder(root->rightChildPtr);
-}
+	//Destructor
+	virtual ~ThreadedBST();
+
+	//Get Depth
+	int getDepth() const;
+
+	// Insert function
+	void Insert(const int& item);
+
+	// Remove
+	void remove(BSTNode& node, int value);
+
+	// Copy
+	ThreadedBST(const ThreadedBST& tree);
+
+	// Remove Even
+	void removeEven();
+
+	// Completes an inorder traversal of the threaded BST
+	void Inorder(BSTNode* root);
+
+	// Clear
+	void clear();
+
+};
+
+#endif
