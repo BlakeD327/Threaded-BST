@@ -7,16 +7,21 @@ using namespace std;
 // Driver code
 int main()
 {
+
+     //Demo Test
+    ThreadedBST test1(35);
+    cout << test1.getDepth();
+    return 0;
+
     ThreadedBST b;
-    BSTNode* root = NULL;
-    b.insert(root, 5);
-    b.insert(root, 3);
-    b.insert(root, 2);
-    b.insert(root, 4);
-    b.insert(root, 7);
-    b.insert(root, 6);
-    b.insert(root, 8);
+    b.insert(5);
+    b.insert(3);
+    b.insert(2);
+    b.insert(4);
+    b.insert(7);
+    b.insert(6);
+    b.insert(8);
  
-    b.insert(root, 9);
+    //b.Inorder(root);
     return 0;
 }
