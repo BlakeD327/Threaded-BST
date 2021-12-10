@@ -12,22 +12,21 @@ BSTNode::BSTNode(int item) {
 	this->isThreadedRight = false;
 }
 
-ThreadedBST::ThreadedBST(int item) { //TODO
-	
+//Default Constructor
+ThreadedBST::ThreadedBST() {
+    this->root = nullptr;
 }
 
-void ThreadedBST::Insert(ThreadedBST* root, int item) {
-    	
-	// start with the root node
-    BSTNode *curr = root; 
-    // pointer to store the parent of the current node
-    BSTNode *parent = nullptr;
- 
+void ThreadedBST::Insert(const int& item) {
     // if the tree is empty, create a new node and set it as root
     if (root == nullptr) {
         root = new BSTNode(item);
         return;
     }
+    // start with the root node
+    BSTNode *curr = root;
+    // pointer to store the parent of the current node
+    BSTNode *parent = nullptr;
 
     // traverse the tree and find the parent node of the given item
     while (curr != nullptr) {
@@ -74,11 +73,11 @@ void ThreadedBST::Insert(ThreadedBST* root, int item) {
 }
 
 
-void ThreadedBST::Inorder(ThreadedBST* root) { //TODO
-	if (!root){
+void ThreadedBST::Inorder(BSTNode* root) {
+	if (root == nullptr){
 		return;
 	}
 	Inorder(root->leftChildPtr);
-	cout << root->data << endl;
+	cout << root->item << endl;
 	Inorder(root->rightChildPtr);
 }
