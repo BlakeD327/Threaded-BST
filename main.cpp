@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "ThreadedBST.h"
 
@@ -8,10 +7,12 @@ using namespace std;
 int main()
 {
 
-     //Demo Test
+     /**
+    //Demo Test
     ThreadedBST test1(35);
     cout << test1.getDepth();
     return 0;
+    */
 
     ThreadedBST b;
     b.insert(5);
@@ -22,6 +23,6 @@ int main()
     b.insert(6);
     b.insert(8);
  
-    //b.Inorder(root);
+    b.Inorder();
     return 0;
 }
