@@ -1,3 +1,13 @@
+/**
+ * @file ThreadedBST.h
+ * @author Group: Jaylon Nelson-Sellers, Jeff Kern, Blake Dupar
+ * @brief A header file for a threaded binary search tree. Creates a binary 
+ *  search tree and threads	together nodes in inorder succession using pointers. 
+ * @version 0.1
+ * @date 2021-12-11
+ * 
+ */
+
 #ifndef ASS5_THREADEDBST_H
 #define ASS5_THREADEDBST_H
 
@@ -25,19 +35,14 @@ private:
 	int count;
 
 public:
-	// Parameterized constructor
 	explicit ThreadedBST();
 
-	//This is a different method from the one above, 
-	// This one creates n number of nodes
-	//  in nonincremental order
 	ThreadedBST(const int& n);
 
 	ThreadedBST(const ThreadedBST& tree);
 
-	//Destructor
 	virtual ~ThreadedBST();
-
+	
 	void insertMultipleNodes(const int& min, const int& max);
 
 	void insert(const int& item);
@@ -50,25 +55,22 @@ public:
 
 	BSTNode* getFarthestRight(BSTNode* node) const;
 
-	// Remove
-	//void remove(BSTNode& node, int value);
-
-	// Remove Even
-	void removeEven();
-
 	void inorder();
-	//Get Depth
+
 	int getDepth() const;
 
-	// Clear
 	void clear(BSTNode* node);
 
 	bool remove(int value);
+
 	void removeCaseA(BSTNode* parent, BSTNode* curr);
+
 	void removeCaseB(BSTNode* parent, BSTNode* curr);
+
 	void removeCaseC(BSTNode* parent, BSTNode* curr);
 
 	BSTNode* inSucc(struct BSTNode* curr);
+
 	BSTNode* inPred(struct BSTNode* curr);
 };
 #endif
