@@ -1,74 +1,69 @@
+#ifndef ASS5_THREADEDBST_H
+#define ASS5_THREADEDBST_H
+
 #include <iostream>
 #include <iomanip>
 
-using namespacestd;
-struct tbstNode {
-	int data;
-	tbstNode *left;
-	tbstNode *right;
-	bool rThread;
+using namespace std;
+
+class BSTNode {
+	friend class ThreadedBST;
+private:
+	explicit BSTNode(int item);
+	int item; //Value
+	BSTNode* leftChildPtr; //Left Pointer
+	BSTNode* rightChildPtr; //Right Pointer
+	bool isThreadedLeft;	//Bool of left Thread
+	bool isThreadedRight;	//Bool of Right Thread
 };
 
-class ThreadedBST {	
-	friend ostream &operator<<(ostream &out, const SkipList &skip);
-	
+class ThreadedBST {
+	//friend ostream& operator<<(ostream& out, const ThreadedBST& tree);
+
+private:
+	BSTNode* root = nullptr;
+	int count;
+
 public:
-	tbstNode* Search(int);
-	tbstNode* root;
-	tbstNode* curPtr;
-	
-	// Default constructor
-	ThreadedBST();
-
 	// Parameterized constructor
-	ThreadedBST(int rootItem);
+	explicit ThreadedBST();
 
-  //Destructor
-  ~ThreadedBST();
-  
-  //Get Depth
-  int getDepth() const;
+	//This is a different method from the one above, 
+	// This one creates n number of nodes
+	//  in nonincremental order
+	ThreadedBST(const int& n);
 
-	// Insert function
-	ThreadedBST* Insert(ThreadedBST* root, int value);
+	//Destructor
+	virtual ~ThreadedBST();
 
-	// Completes an inorder traversal of the threaded BST
-	void Inorder(ThreadedBST* root);
-	
-	// Delete
+	void insertMultipleNodes(const int& min, const int& max);
 
-	void remove(tbst<ItemType> *node, ItemType data);
-	
+	void insert(const int& item);
+
+	BSTNode* insert(BSTNode* node, const int& data);
+
+	void setThread(BSTNode* node);
+
+	BSTNode* getFarthestLeft(BSTNode* node) const;
+
+	BSTNode* getFarthestRight(BSTNode* node) const;
+
+	// Remove
+	void remove(BSTNode& node, int value);
+
 	// Copy
-	ThreadedBST(const ThreadedBST<ItemType> &tree);
-	
+	ThreadedBST(const ThreadedBST& tree);
+
+	BSTNode* inorderSuccessor(BSTNode* pointer);
+
 	// Remove Even
 	void removeEven();
-	
-  //Inorder Traverse for testing
-  void inorderTraverse();
-  
-  //I don't think we need these. 
-	// Operator= overload
-	// Operator<< overload
-	
+
+	void inorder();
+	//Get Depth
+	int getDepth() const;
 
 	// Clear
-	void clear()
-
+	void clear(BSTNode* node);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif
