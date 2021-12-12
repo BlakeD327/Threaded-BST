@@ -13,8 +13,11 @@ int main(int argc, char** argv)
 
     //Demo Test
     ThreadedBST test1(35);
-    cout << test1.getDepth() << endl;
     test1.inorder();
+    cout << endl;
+
+    ThreadedBST test2(test1);
+    test2.inorder();
     cout << endl;
 
     ThreadedBST b;
