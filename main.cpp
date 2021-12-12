@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 
 
     //Demo Test
-    ThreadedBST test1(35);
+    ThreadedBST test1(5);
     test1.inorder();
     cout << endl;
 
