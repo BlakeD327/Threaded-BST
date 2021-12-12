@@ -7,6 +7,7 @@ using namespace std;
 // Driver code
 int main(int argc, char** argv)
 {
+    /*
     ThreadedBST testArgs(atoi(argv[0]));
     testArgs.inorder();
 
@@ -19,6 +20,8 @@ int main(int argc, char** argv)
     ThreadedBST test2(test1);
     test2.inorder();
     cout << endl;
+    */
+
 
     ThreadedBST b;
     b.insert(5);
@@ -30,5 +33,12 @@ int main(int argc, char** argv)
     b.insert(8);
 
     b.inorder();
+    cout << endl;
+    
+    b.remove(2);
+
+    cout << endl;
+    b.inorder();
+
     return 0;
 }
