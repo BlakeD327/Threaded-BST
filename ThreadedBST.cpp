@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <math.h>
 #include "ThreadedBST.h"
@@ -17,7 +18,6 @@ ThreadedBST::ThreadedBST() {
 	count = 0;
 }
 
-/*Set number of nodes
 //Set number of nodes
 ThreadedBST::ThreadedBST(const int& numOfNodes) {
 	root = nullptr;
@@ -26,31 +26,32 @@ ThreadedBST::ThreadedBST(const int& numOfNodes) {
 		insertMultipleNodes(1, numOfNodes);
 		setThread(root);
 	}
-}*/
+}
 
 ThreadedBST::~ThreadedBST() {
 	clear(root);
 }
 
-
- //MINE
-BSTNode* ThreadedBST::insert(BSTNode* node, const int& newItem) {
+/**
+void ThreadedBST::Insert(const int& item) {
 	// if the tree is empty, create a new node and set it as root
 	if (root == nullptr) {
-		root = new BSTNode(newItem);
-		return root;
+		root = new BSTNode(item);
+		return;
 	}
 	// start with the root node
 	BSTNode* curr = root;
 	// pointer to store the parent of the current node
 	BSTNode* parent = nullptr;
+
 	// traverse the tree and find the parent node of the given item
 	while (curr != nullptr) {
 		// update the parent to the current node
 		parent = curr;
+
 		// if the given item is less than the current node, go to the
 		// left subtree; otherwise, go to the right subtree.
-		if (newItem < curr->item) {
+		if (item < curr->item) {
 			if (curr->isThreadedLeft == true) {
 				break;
 			}
@@ -67,17 +68,19 @@ BSTNode* ThreadedBST::insert(BSTNode* node, const int& newItem) {
 			}
 		}
 	} //end while loop
+
 	// construct a node and assign it to the appropriate parent pointer
-	BSTNode* newNode = new BSTNode(newItem);
+	BSTNode* newNode = new BSTNode(item);
 	newNode->isThreadedRight = newNode->isThreadedLeft = true;
-	if (newItem < parent->item) {
+
+	if (item < parent->item) {
 		//set newNode's left ptr to its parent's old left ptr
 		newNode->leftChildPtr = parent->leftChildPtr;
 		//newNode's right ptr points back at parent
 		newNode->rightChildPtr = parent;
 		//parent points to newNode
 		parent->leftChildPtr = newNode;
-		//set parent's isThreadedLeft(bool) to false as it now has 
+		//set parent's isThreadedLeft(bool) to false as it now has
 		// a lwft node
 		parent->isThreadedLeft = false;
 	}
@@ -87,11 +90,10 @@ BSTNode* ThreadedBST::insert(BSTNode* node, const int& newItem) {
 		parent->rightChildPtr = newNode;
 		parent->isThreadedRight = false;
 	}
-	return node;
 }
 
+*/
 
-/**
 void ThreadedBST::insertMultipleNodes(const int& min, const int& max) {
 	int middle = (min + max) / 2;
 	//recursive case
@@ -108,12 +110,11 @@ void ThreadedBST::insertMultipleNodes(const int& min, const int& max) {
 		}
 	}
 }
-*/
 
 void ThreadedBST::insert(const int& newItem) {
 	insert(root, newItem);
 }
-/** new inserts
+
 BSTNode* ThreadedBST::insert(BSTNode* node, const int& newItem) {
 	//Case 1: If the tree is empty, return a single new
 	if (node == nullptr) {
@@ -125,6 +126,8 @@ BSTNode* ThreadedBST::insert(BSTNode* node, const int& newItem) {
 		return new BSTNode(newItem);
 	}
 	BSTNode* tempNode = nullptr;
+
+	//Case 2: Go recursively through the tree
 	if (newItem < node->item) {
 		tempNode = insert(node->leftChildPtr, newItem);
 		node->leftChildPtr = tempNode;
@@ -133,31 +136,28 @@ BSTNode* ThreadedBST::insert(BSTNode* node, const int& newItem) {
 		tempNode = insert(node->rightChildPtr, newItem);
 		node->rightChildPtr = tempNode;
 	}
+
 	return node;
 }
 
+
 void ThreadedBST::setThread(BSTNode* node) {
-	//checks if node exists
 	if (node != nullptr) {
-		//checks if left thread exists and node isn't farthest left
 		if (!(node->isThreadedLeft) && node != getFarthestLeft(root)) {
-			//Sets Values if so
-			BSTNode* leftTempNode = getFarthestRight(node->leftChildPtr);
-			leftTempNode->rightChildPtr = node;
-			leftTempNode->isThreadedRight = true;
-			//Recursively sets left child
+			BSTNode* leftNode = getFarthestRight(node->leftChildPtr);
+			leftNode->rightChildPtr = (node);
+			leftNode->isThreadedRight=(true);
 			setThread(node->leftChildPtr);
 		}
-		//Checks if right thread exissts and node isn't farthest left
-		if (!(node->rightChildPtr) && node != getFarthestRight(root)) {
-			//Sets Values if so
-			BSTNode* rightTempNode = getFarthestLeft(node->rightChildPtr);
-			rightTempNode->leftChildPtr = node;
-			rightTempNode->isThreadedLeft= true;
+		if (!(node->isThreadedRight) && node != getFarthestRight(root)) {
+			BSTNode* rightNode = getFarthestLeft(node->rightChildPtr);
+			rightNode->leftChildPtr=(node);
+			rightNode->isThreadedLeft= (true);
 			setThread(node->rightChildPtr);
 		}
 	}
 }
+
 
 BSTNode* ThreadedBST::getFarthestLeft(BSTNode* node) const {
 	//checks if Node is null
@@ -170,6 +170,7 @@ BSTNode* ThreadedBST::getFarthestLeft(BSTNode* node) const {
 
 	return node;
 }
+
 BSTNode* ThreadedBST::getFarthestRight(BSTNode* node) const {
 	//checks if Node is null
 	if (node == nullptr)
@@ -182,10 +183,26 @@ BSTNode* ThreadedBST::getFarthestRight(BSTNode* node) const {
 	return node;
 
 }
-*/
 
 int ThreadedBST::getDepth() const {
-	return log2(count + 1);
+	return log(count + 1);
+}
+
+
+void ThreadedBST::inorder() {
+	setThread(root);
+	BSTNode* current = getFarthestLeft(root);
+	while (current != NULL) {
+		printf("%d ", current->item);
+
+		// If this node is a thread node, then go to
+		// inorder successor
+		if (current->isThreadedRight)
+			current = current->rightChildPtr;
+		else // Else go to the leftmost child in right
+			 // subtree
+			current = getFarthestLeft(current->rightChildPtr);
+	}
 }
 
 void ThreadedBST::clear(BSTNode* node) {
@@ -215,91 +232,3 @@ void ThreadedBST::clear(BSTNode* node) {
 		}
 	}
 }
-
-
-bool ThreadedBST::hasLeftChild(BSTNode* targetNode) {
-	BSTNode* temp = targetNode;
-	return(!temp->isThreadedLeft && temp->leftChildPtr != nullptr);
-}
-
-bool ThreadedBST::hasRightChild(BSTNode* targetNode) {
-	BSTNode* temp = targetNode;
-	return(!temp->isThreadedRight && temp->rightChildPtr != nullptr);
-}
-
-/**
- * Calls the real recursive in order traversal and hands it the tree's root
- */
-void ThreadedBST::Inorder() {
-	recInorder(root);
-}
-
-/**
- * Main recursive function for in order.
- * The recursive function calls on print nodes to handle printing.
- * @param root - the ThreadedBST tree for traversal
- * @param printCount - count of elements */
-void ThreadedBST::recInorder(BSTNode* root) {
-    // as long as the root is not null, recurses left children, then right children
-    if(root != NULL)
-    {
-        if(hasLeftChild(root)) {
-            recPreOrder(root->leftChildPtr);
-        }
-        //printNodes(&root);
-		cout << root->item << endl;
-        if(hasRightChild(root)) {
-            recPreOrder(root->rightChildPtr);
-        }        
-    }
-}
-
-/**
- * Calls the real recursive pre order traversal and hands it the tree's root
- */
-void ThreadedBST::PreOrder(){
-    recPreOrder(root);
-}
-
-/**
- * Main recursive function for preorder.
- * The recursive function calls on print nodes to handle printing.
- * @param root - the ThreadedBST tree for traversal
- * @param printCount - count of elements
- */
-void ThreadedBST::recPreOrder(BSTNode* root) {
-    // as long as the root is not null, recurses left children, then right children
-    if(root != NULL) {
-        //printNodes(&root);  
-		cout << root->item << endl;      
-        if(hasLeftChild(root)) {
-            recPreOrder(root->leftChildPtr);
-        }        
-        if(hasRightChild(root)) {
-            recPreOrder(root->rightChildPtr);
-        }
-    }
-}
-
-/**
-void ThreadedBST::Inorder() {
-	//recInorder(root);
-	if (root == nullptr) {
-		return;
-	}
-	BSTNode* curr = root;
-	while(curr->leftChildPtr != nullptr) {
-		curr = curr->leftChildPtr;
-	}
-	while (curr != nullptr) {
-		cout << curr->item << endl;
-		curr = curr->rightChildPtr;
-	}
-}
-*/
-/**
-void ThreadedBST::recInorder(BSTNode* root) {
-	if (root == nullptr) {
-		return;
-	}	
-}*/
