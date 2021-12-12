@@ -43,68 +43,6 @@ ThreadedBST::~ThreadedBST() {
 	clear(root);
 }
 
-/**
-void ThreadedBST::Insert(const int& item) {
-	// if the tree is empty, create a new node and set it as root
-	if (root == nullptr) {
-		root = new BSTNode(item);
-		return;
-	}
-	// start with the root node
-	BSTNode* curr = root;
-	// pointer to store the parent of the current node
-	BSTNode* parent = nullptr;
-
-	// traverse the tree and find the parent node of the given item
-	while (curr != nullptr) {
-		// update the parent to the current node
-		parent = curr;
-
-		// if the given item is less than the current node, go to the
-		// left subtree; otherwise, go to the right subtree.
-		if (item < curr->item) {
-			if (curr->isThreadedLeft == true) {
-				break;
-			}
-			else {
-				curr = curr->leftChildPtr;
-			}
-		}
-		else {
-			if (curr->isThreadedRight == true) {
-				break;
-			}
-			else {
-				curr = curr->rightChildPtr;
-			}
-		}
-	} //end while loop
-
-	// construct a node and assign it to the appropriate parent pointer
-	BSTNode* newNode = new BSTNode(item);
-	newNode->isThreadedRight = newNode->isThreadedLeft = true;
-
-	if (item < parent->item) {
-		//set newNode's left ptr to its parent's old left ptr
-		newNode->leftChildPtr = parent->leftChildPtr;
-		//newNode's right ptr points back at parent
-		newNode->rightChildPtr = parent;
-		//parent points to newNode
-		parent->leftChildPtr = newNode;
-		//set parent's isThreadedLeft(bool) to false as it now has
-		// a lwft node
-		parent->isThreadedLeft = false;
-	}
-	else {
-		newNode->rightChildPtr = parent->rightChildPtr;
-		newNode->leftChildPtr = parent;
-		parent->rightChildPtr = newNode;
-		parent->isThreadedRight = false;
-	}
-}
-
-*/
-
 void ThreadedBST::insertMultipleNodes(const int& min, const int& max) {
 	int middle = (min + max) / 2;
 	//recursive case
@@ -192,7 +130,6 @@ BSTNode* ThreadedBST::getFarthestRight(BSTNode* node) const {
 		node = node->rightChildPtr;
 
 	return node;
-
 }
 
 int ThreadedBST::getDepth() const {
@@ -242,4 +179,162 @@ void ThreadedBST::clear(BSTNode* node) {
 			node = nullptr;
 		}
 	}
+}
+
+
+// In order Predecessor
+BSTNode* ThreadedBST::inPred(BSTNode* ptr)
+{
+    if (ptr->isThreadedLeft == true)
+        return ptr->leftChildPtr;
+ 
+    ptr = ptr->leftChildPtr;
+    while (ptr->isThreadedRight == false)
+        ptr = ptr->rightChildPtr;
+    return ptr;
+}
+
+// Returns inorder successor using left
+// and right children (Used in deletion)
+BSTNode* ThreadedBST::inSucc(BSTNode* ptr)
+{
+    if (ptr->isThreadedRight == true)
+        return ptr->rightChildPtr;
+ 
+    ptr = ptr->rightChildPtr;
+    while (ptr->isThreadedLeft == false)
+        ptr = ptr->leftChildPtr;
+ 
+    return ptr;
+}
+
+
+bool ThreadedBST::remove(int value) {
+    BSTNode *parent = nullptr, *curr = root;
+    bool found = false;
+
+    // Search value in BST : find BSTNode and its
+    // parent.
+    while (curr != nullptr) {
+        if (value == curr->item) {
+            found = true;
+            break;
+        }
+        parent = curr;
+        if (value < curr->item) {
+            if (curr->isThreadedLeft == false)
+                curr = curr->leftChildPtr;
+            else
+                break;
+        }
+        else {
+            if (curr->isThreadedRight == false)
+                curr = curr->rightChildPtr;
+            else
+                break;
+        }
+    } // end while
+    // Two Children
+    if (curr->isThreadedLeft == false && curr->isThreadedRight == false)
+        removeCaseC(parent, curr);
+ 
+    // Only Left Child
+    else if (curr->isThreadedLeft == false)
+        removeCaseB(parent, curr);
+ 
+    // Only Right Child
+    else if (curr->isThreadedRight == false)
+        removeCaseB(parent, curr);
+ 
+    // No child
+    else
+        removeCaseA(parent, curr);
+ 
+    return found;
+}
+
+// Here 'parent' is pointer to parent BSTNode and 'curr' is
+// pointer to current BSTNode.
+void ThreadedBST::removeCaseA(BSTNode* parent, BSTNode* curr) {
+    // If BSTNode to be deleted is root
+    if (parent == nullptr)
+        root = nullptr;
+ 
+    // If BSTNode to be deleted is left
+    // of its parent
+    else if (curr == parent->leftChildPtr) {
+        parent->isThreadedLeft = true;
+        parent->leftChildPtr = curr->leftChildPtr;
+    }
+    else {
+        parent->isThreadedRight = true;
+        parent->rightChildPtr = curr->rightChildPtr;
+    }
+ 
+    // Free memory and return new root
+    delete(curr);
+}
+
+// Here 'parent' is pointer to parent BSTNode and 'curr' is
+// pointer to current BSTNode.
+void ThreadedBST::removeCaseB(BSTNode* parent, BSTNode* curr)
+{
+    BSTNode* child;
+ 
+    // Initialize child BSTNode to be deleted has
+    // left child.
+    if (curr->isThreadedLeft == false)
+        child = curr->leftChildPtr;
+ 
+    // BSTNode to be deleted has right child.
+    else
+        child = curr->rightChildPtr;
+ 
+    // BSTNode to be deleted is root BSTNode.
+    if (parent == nullptr)
+        root = child;
+ 
+    // BSTNode is left child of its parent.
+    else if (curr == parent->leftChildPtr)
+        parent->leftChildPtr = child;
+    else
+        parent->rightChildPtr = child;
+ 
+    // Find successor and predecessor
+    BSTNode* s = inSucc(curr);
+    BSTNode* p = inPred(curr);
+	 
+    // If curr has left subtree.
+    if (curr->isThreadedLeft == false)
+        p->rightChildPtr = s;
+ 
+    // If curr has right subtree.
+    else {
+        if (curr->isThreadedRight == false)
+            s->leftChildPtr = p;
+    }
+ 
+    delete(curr);
+}
+
+// Here 'parent' is pointer to parent Node and 'curr' is
+// pointer to current Node.
+void ThreadedBST::removeCaseC(BSTNode* parent, BSTNode* curr) {
+
+    // Find inorder successor and its parent.
+    BSTNode* parsucc = curr;
+    BSTNode* succ = curr->rightChildPtr;
+ 
+    // Find leftmost child of successor
+    while (succ->isThreadedLeft==false) {
+        parsucc = succ;
+        succ = succ->leftChildPtr;
+    }
+ 
+    curr->item = succ->item;
+ 
+    if (succ->isThreadedLeft == true && succ->isThreadedRight == true)
+        removeCaseA(parsucc, succ);
+    else
+        removeCaseB(parsucc, succ);
 }
