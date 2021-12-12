@@ -1,18 +1,21 @@
+
 #include <iostream>
 #include "ThreadedBST.h"
 
 using namespace std;
 
 // Driver code
-int main()
+int main(int argc, char** argv)
 {
+    ThreadedBST testArgs(atoi(argv[0]));
+    testArgs.inorder();
 
-     /**
+
     //Demo Test
     ThreadedBST test1(35);
-    cout << test1.getDepth();
-    return 0;
-    */
+    cout << test1.getDepth() << endl;
+    test1.inorder();
+    cout << endl;
 
     ThreadedBST b;
     b.insert(5);
@@ -22,7 +25,7 @@ int main()
     b.insert(7);
     b.insert(6);
     b.insert(8);
- 
-    b.Inorder();
+
+    b.inorder();
     return 0;
 }
