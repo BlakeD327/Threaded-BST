@@ -28,6 +28,17 @@ ThreadedBST::ThreadedBST(const int& numOfNodes) {
 	}
 }
 
+ThreadedBST::ThreadedBST(const ThreadedBST& copyTree) {
+	root = nullptr;
+	count = 0;
+	//cheeky method for copy content
+	if (copyTree.count > 0) {
+		insertMultipleNodes(1, copyTree.count);
+		setThread(root);
+	}
+
+}
+
 ThreadedBST::~ThreadedBST() {
 	clear(root);
 }
@@ -146,13 +157,13 @@ void ThreadedBST::setThread(BSTNode* node) {
 		if (!(node->isThreadedLeft) && node != getFarthestLeft(root)) {
 			BSTNode* leftNode = getFarthestRight(node->leftChildPtr);
 			leftNode->rightChildPtr = (node);
-			leftNode->isThreadedRight=(true);
+			leftNode->isThreadedRight = (true);
 			setThread(node->leftChildPtr);
 		}
 		if (!(node->isThreadedRight) && node != getFarthestRight(root)) {
 			BSTNode* rightNode = getFarthestLeft(node->rightChildPtr);
-			rightNode->leftChildPtr=(node);
-			rightNode->isThreadedLeft= (true);
+			rightNode->leftChildPtr = (node);
+			rightNode->isThreadedLeft = (true);
 			setThread(node->rightChildPtr);
 		}
 	}
