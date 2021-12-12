@@ -33,6 +33,8 @@ public:
 	//  in nonincremental order
 	ThreadedBST(const int& n);
 
+	ThreadedBST(const ThreadedBST& tree);
+
 	//Destructor
 	virtual ~ThreadedBST();
 
@@ -50,11 +52,6 @@ public:
 
 	// Remove
 	void remove(BSTNode& node, int value);
-
-	// Copy
-	ThreadedBST(const ThreadedBST& tree);
-
-	BSTNode* inorderSuccessor(BSTNode* pointer);
 
 	// Remove Even
 	void removeEven();
