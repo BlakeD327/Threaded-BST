@@ -42,37 +42,24 @@ public:
 
 	BSTNode* insert(BSTNode* node, const int& data);
 
-	
 	void setThread(BSTNode* node);
 
 	BSTNode* getFarthestLeft(BSTNode* node) const;
 
 	BSTNode* getFarthestRight(BSTNode* node) const;
-	
+
 	// Remove
 	void remove(BSTNode& node, int value);
 
 	// Copy
 	ThreadedBST(const ThreadedBST& tree);
 
+	BSTNode* inorderSuccessor(BSTNode* pointer);
+
 	// Remove Even
 	void removeEven();
 
-	void Inorder();
-
-	void recInorder(BSTNode* root);
-
-	void PreOrder();
-
-	void recPreOrder(BSTNode* root);
-
-	bool hasLeftChild(BSTNode* targetNode);
-
-	bool hasRightChild(BSTNode* targetNode);
-
-	// Completes an inorder traversal of the threaded BST
-	//void Inorder(BSTNode* node);
-
+	void inorder();
 	//Get Depth
 	int getDepth() const;
 
