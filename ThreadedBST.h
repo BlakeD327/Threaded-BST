@@ -51,7 +51,7 @@ public:
 	BSTNode* getFarthestRight(BSTNode* node) const;
 
 	// Remove
-	void remove(BSTNode& node, int value);
+	//void remove(BSTNode& node, int value);
 
 	// Remove Even
 	void removeEven();
@@ -62,5 +62,13 @@ public:
 
 	// Clear
 	void clear(BSTNode* node);
+
+	bool remove(int value);
+	void removeCaseA(BSTNode* parent, BSTNode* curr);
+	void removeCaseB(BSTNode* parent, BSTNode* curr);
+	void removeCaseC(BSTNode* parent, BSTNode* curr);
+
+	BSTNode* inSucc(struct BSTNode* curr);
+	BSTNode* inPred(struct BSTNode* curr);
 };
 #endif
